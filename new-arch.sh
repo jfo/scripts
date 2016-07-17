@@ -64,21 +64,16 @@ then
 
     genfstab /mnt > /mnt/etc/fstab
 
-    arch-chroot /mnt /bin/bash -c <<EOF
+    arch-chroot /mnt /bin/bash -c '
+        git config --global user.name "Jeff Fowler" &&
+        git config --global user.email "jeffowler@gmail.com" &&
+        locale-gen en_US.UTF-8 &&
+        ln -s /usr/shar/zoneinfo/America/New_York /etc/localtime &&
+        hwclock --systohc --utc &&
+        grub-install --efi-directory=/boot &&
+        grub-mkconfig -o /boot/grub/grub.cfg &&
+        useradd -m -g users -G wheel,storage,power -s /bin/bash jfo && passwd jfo'
 
-git config --global user.name "Jeff Fowler"
-git config --global user.email "jeffowler@gmail.com"
-
-locale-gen en_US.UTF-8
-ln -s /usr/shar/zoneinfo/America/New_York /etc/localtime
-hwclock --systohc --utc
-
-grub-install --efi-directory=/boot
-grub-mkconfig -o /boot/grub/grub.cfg
-
-useradd -m -g users -G wheel,storage,power -s /bin/bash jfo && passwd jfo
-
-EOF
 
     echo "new-arch.sh is done. you can probably reboot now."
 
