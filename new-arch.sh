@@ -7,6 +7,11 @@ echo
 if [[ $response =~ ^[Yy]es$ ]]
 then
 
+    nc -z 8.8.8.8 53  >/dev/null 2>&1 && online=$?
+    if [ ! $online -eq 0 ]; then
+        wifi-menu
+    fi
+
     # make sure nothing is mounted and turn off all swap partitions
     umount /mnt/boot
     umount /mnt
@@ -59,18 +64,18 @@ then
 
     genfstab /mnt > /mnt/etc/fstab
 
-
     arch-chroot /mnt /bin/bash -c <<EOF
 
 git config --global user.name "Jeff Fowler"
 git config --global user.email "jeffowler@gmail.com"
 
-echo LANG=en_US.UTF-8 UTF-8 > /etc/locale.conf && export LANG=en_US.UTF-8
-grub-install --efi-directory=/boot && grub-mkconfig -o /boot/grub/grub.cfg
-ln -s /usr/shar/zoneinfo/America/New_York /etc/localtime && hwclock --systohc --utc
+locale-gen en_US.UTF-8
+ln -s /usr/shar/zoneinfo/America/New_York /etc/localtime
+hwclock --systohc --utc
 
-systemctl enable net-auto-wireless.service
-systemctl enable gdm.service
+grub-install --efi-directory=/boot
+grub-mkconfig -o /boot/grub/grub.cfg
+
 useradd -m -g users -G wheel,storage,power -s /bin/bash jfo && passwd jfo
 
 EOF
