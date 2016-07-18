@@ -72,9 +72,10 @@ then
         hwclock --systohc --utc &&
         grub-install --efi-directory=/boot &&
         grub-mkconfig -o /boot/grub/grub.cfg &&
-        useradd -m -g users -G wheel,storage,power -s /bin/bash jfo && passwd jfo'
+        useradd -m -g users -G wheel,storage,power -s /bin/bash jfo && passwd jfo &&
+        su jfo -c "git clone https://github.com/urthbound/scripts ~/"'
 
 
-    echo "new-arch.sh is done. you can probably reboot now."
+    echo "new-arch.sh is done. you can probably reboot now. Don't forget to edit the sudoers file."
 
 fi
