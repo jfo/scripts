@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo -n "Are you sure? This will destroy and recreate /dev/sda\n yes/no?"
+echo "Are you sure? This will destroy and recreate /dev/sda yes/no?"
+echo "yes/no?"
 read response
 echo
 
