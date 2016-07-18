@@ -60,7 +60,8 @@ then
         vim             \
         tmux            \
         wget            \
-        sudo
+        sudo 		\
+	openssh
 
     genfstab /mnt > /mnt/etc/fstab
 
@@ -72,6 +73,8 @@ then
         hwclock --systohc --utc &&
         grub-install --efi-directory=/boot &&
         grub-mkconfig -o /boot/grub/grub.cfg &&
+	systemctl enable sshd.service &&
+	systemctl start sshd.service &&
         useradd -m -g users -G wheel,storage,power -s /bin/bash jfo && passwd jfo &&
         su jfo -c "git clone https://github.com/urthbound/scripts ~/"'
 
